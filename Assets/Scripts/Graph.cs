@@ -37,7 +37,7 @@ public class Graph : MonoBehaviour
         {
             Transform point = points[i];
             Vector3 position = point.localPosition;
-            position.y = 0.5f*Mathf.Sin(Mathf.PI*(position.x+time));
+            position.y = FunctionLib.Wave(position.x,time);
 
             point.localPosition = position;
         }
