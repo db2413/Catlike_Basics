@@ -14,6 +14,18 @@ public static class FunctionLib
     {
         return functions[(int) name];
     }
+
+    public static FunctionName GetNextFunctionName(FunctionName name)
+    {
+        return  (FunctionName) (((int)name + 1) % functions.Length) ;
+    }
+
+    public static Vector3 Morph (
+    float u, float v, float t, Function from, Function to, float progress
+    ) {
+        return Vector3.LerpUnclamped(from(u, v, t), to(u, v, t), progress);
+    }
+
     public static Vector3 Wave(float u, float v, float t)
     {
         Vector3 p;
