@@ -7,22 +7,34 @@ public static class FunctionLib
 {
     // Take a grid and time as input and output y
     public delegate float Function(float x, float z, float t);
-    static Function[] functions = { Wave, MultiWave, Ripple };
-    public enum FunctionName { Wave, MultiWave, Ripple };
+    static Function[] functions = { XWave, Wave, DoubleWave, TripleWave, Ripple };
+    public enum FunctionName { XWave, Wave, DoubleWave, TripleWave, Ripple };
 
     public static Function GetFunction (FunctionName name)
     {
         return functions[(int) name];
     }
-    public static float Wave (float x, float z, float t) {
+    public static float XWave(float x, float z, float t)
+    {
         return Sin(PI * (x + t));
     }
+    public static float Wave (float x, float z, float t) {
+        return Sin(PI * ((x + z)/2 + t));
+    }
 
-    public static float MultiWave (float x, float z, float t)
+    public static float DoubleWave (float x, float z, float t)
     {
         float y = Wave(x,z,t);
-        y += Sin(2*PI * (x + t*0.7f))/2;
+        y += Sin(2*PI * (z + t*0.7f))/2;
         return y/1.5f;
+    }
+
+    public static float TripleWave(float x, float z, float t)
+    {
+        float y = Wave(x, z, t);
+        y += 0.5f * Sin(2 * PI * (z + t * 0.7f));
+        y += Sin(PI * (x + z + 0.25f * t));
+        return y / 2.5f;
     }
 
     /// <summary>
@@ -36,7 +48,7 @@ public static class FunctionLib
     /// <returns></returns>
     public static float Ripple (float x, float z, float t)
     {
-        float d = Abs(x);
+        float d = Sqrt(x*x+z*z);
         return Sin(4 * PI * (d - t*0.2f)) / (1f + 10f * d);
     }
 }
