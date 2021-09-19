@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   surfaceOrVolume: 0
   pointPrefab: {fileID: 299007988993315681, guid: b314c75760045f94183f517940ce2092, type: 3}
-  resolution: 85
+  resolution: 57
   function: 4
   functionDuration: 3
   transitionDuration: 3
