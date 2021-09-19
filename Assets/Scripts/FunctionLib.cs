@@ -7,8 +7,8 @@ public static class FunctionLib
 {
     // Take a grid and time as input and output y
     public delegate Vector3 Function(float u, float v, float t);
-    static Function[] functions = { Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder };
-    public enum FunctionName {  Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder };
+    static Function[] functions = { Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder, Torus, Test };
+    public enum FunctionName {  Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder, Torus, Test };
 
     public static Function GetFunction (FunctionName name)
     {
@@ -62,11 +62,13 @@ public static class FunctionLib
 
     public static Vector3 Sphere (float u, float v, float t)
     {
-        float r = Cos(0.5f * PI * v); // v is height in a manner of speaking
+        //float r = 0.5f + 0.5f * Sin(PI * t); // radius scaled by time 0 to 1
+        float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t)); //twisty thing
+        float s = r * Cos(0.5f * PI * v);
         Vector3 p;
-        p.x = r * Sin(PI * u) ;
-        p.y = Sin(0.5f * PI * v);
-        p.z = r * Cos(PI * u) ;
+        p.x = s * Sin(PI * u) ;
+        p.y = r * Sin(0.5f * PI * v);
+        p.z = s * Cos(PI * u) ;
 
         return p;
     }
@@ -77,6 +79,34 @@ public static class FunctionLib
         p.x = Sin(PI * u);
         p.y = v;
         p.z = Cos(PI * u);
+
+        return p;
+    }
+
+    public static Vector3 Torus(float u, float v, float t)
+    {
+        float r1 = 0.25f;
+        float r2 = 0.75f;
+
+        // Effects
+        Vector3 p = Ripple(u,v,t);
+        //r2 = 0.7f + 0.051f * Sin(PI * (16f * u + 0.15f * t));
+        //r1 = 0.15f + 0.05f * Sin(PI * (v + u + t));
+
+        float s = r2 + r1 * Cos(PI * v);
+        p.x = s * Sin(PI * u);
+        p.y = r1 * Sin(PI * v);
+        p.z = s * Cos(PI * u);
+
+        return p;
+    }
+
+    public static Vector3 Test(float u, float v, float t)
+    {
+        Vector3 p;
+        p.x = u;
+        p.y = 0.5f + 0.5f * Sin(PI * t);
+        p.z = v;
 
         return p;
     }
