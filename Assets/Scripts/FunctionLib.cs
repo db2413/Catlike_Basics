@@ -7,8 +7,8 @@ public static class FunctionLib
 {
     // Take a grid and time as input and output y
     public delegate Vector3 Function(float u, float v, float t);
-    static Function[] functions = { Wave, DoubleWave, TripleWave, Ripple };
-    public enum FunctionName {  Wave, DoubleWave, TripleWave, Ripple };
+    static Function[] functions = { Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder };
+    public enum FunctionName {  Wave, DoubleWave, TripleWave, Ripple, Sphere, Cylinder };
 
     public static Function GetFunction (FunctionName name)
     {
@@ -57,6 +57,27 @@ public static class FunctionLib
         float d = Sqrt(u * u + v * v);
         p.y = Sin(4 * PI * (d - t * 0.2f)) / (1f + 10f * d);
         p.z = v;
+        return p;
+    }
+
+    public static Vector3 Sphere (float u, float v, float t)
+    {
+        float r = Cos(0.5f * PI * v); // v is height in a manner of speaking
+        Vector3 p;
+        p.x = r * Sin(PI * u) ;
+        p.y = Sin(0.5f * PI * v);
+        p.z = r * Cos(PI * u) ;
+
+        return p;
+    }
+
+    public static Vector3 Cylinder(float u, float v, float t)
+    {
+        Vector3 p;
+        p.x = Sin(PI * u);
+        p.y = v;
+        p.z = Cos(PI * u);
+
         return p;
     }
 }

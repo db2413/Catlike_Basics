@@ -16,19 +16,11 @@ public class VolumeGraph : MonoBehaviour
     {
         points = new Transform[resolution * resolution];
 
-        var position = Vector3.zero;
         var scale = Vector3.one / resolution * 2;
-        float step = 2f / (resolution-1); // -1 to 1 x range
 
         for (int i = 0; i < points.Length; i++)
         {
-            int x = i % resolution;
-            int z = i / resolution;
             Transform point = points[i] = Instantiate(pointPrefab);
-            position.x = x * step - 1;
-            position.z = z * step - 1;
-            position.y = 0;
-            point.localPosition = position;
             point.localScale = scale;
             point.SetParent(transform);
         }
