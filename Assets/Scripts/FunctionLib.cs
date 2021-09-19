@@ -6,19 +6,12 @@ using static UnityEngine.Mathf;
 public static class FunctionLib
 {
     public delegate float Function(float x, float t);
+    static Function[] functions = { Wave, MultiWave, Ripple };
+    public enum FunctionName { Wave, MultiWave, Ripple };
 
-    public static Function GetFunction (int index)
+    public static Function GetFunction (FunctionName name)
     {
-        if (index == 0){
-            return Wave;
-        }
-        else if (index == 1){
-            return MultiWave;
-        }
-        else if (index == 2){
-            return Ripple;
-        }
-        return null ;
+        return functions[(int) name];
     }
     public static float Wave (float x, float t) {
         return Sin(PI * (x + t));
