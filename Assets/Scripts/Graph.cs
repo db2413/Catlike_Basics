@@ -8,7 +8,7 @@ public class Graph : MonoBehaviour
     Transform[] points;
     [SerializeField, Range(10,200)] int resolution = 10;
     float time;
-    [SerializeField, Range(0, 1)] int function;
+    [SerializeField, Range(0, 2)] int functionId;
 
     // Start is called before the first frame update
     void Start()
@@ -38,14 +38,7 @@ public class Graph : MonoBehaviour
         {
             Transform point = points[i];
             Vector3 position = point.localPosition;
-            if (function == 0)
-            {
-                position.y = FunctionLib.Wave(position.x,time);
-            }
-            else
-            {
-                position.y = FunctionLib.MultiWave(position.x,time);
-            }
+            position.y = FunctionLib.GetFunction(functionId)(position.x,time);
 
             point.localPosition = position;
         }

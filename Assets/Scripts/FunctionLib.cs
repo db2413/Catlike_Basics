@@ -5,6 +5,21 @@ using static UnityEngine.Mathf;
 
 public static class FunctionLib
 {
+    public delegate float Function(float x, float t);
+
+    public static Function GetFunction (int index)
+    {
+        if (index == 0){
+            return Wave;
+        }
+        else if (index == 1){
+            return MultiWave;
+        }
+        else if (index == 2){
+            return Ripple;
+        }
+        return null ;
+    }
     public static float Wave (float x, float t) {
         return Sin(PI * (x + t));
     }
@@ -16,4 +31,18 @@ public static class FunctionLib
         return y/1.5f;
     }
 
+    /// <summary>
+    /// Sine wave move away from the origin, 
+    /// instead of always traveling in the same direction. 
+    /// We can do this by basing it on the distance from the center,
+    /// which is the absolute of X.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="t"></param>
+    /// <returns></returns>
+    public static float Ripple (float x, float t)
+    {
+        float d = Abs(x);
+        return Sin(4 * PI * (d - t*0.2f)) / (1f + 10f * d);
+    }
 }
