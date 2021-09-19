@@ -5,7 +5,8 @@ using static UnityEngine.Mathf;
 
 public static class FunctionLib
 {
-    public delegate float Function(float x, float t);
+    // Take a grid and time as input and output y
+    public delegate float Function(float x, float z, float t);
     static Function[] functions = { Wave, MultiWave, Ripple };
     public enum FunctionName { Wave, MultiWave, Ripple };
 
@@ -13,13 +14,13 @@ public static class FunctionLib
     {
         return functions[(int) name];
     }
-    public static float Wave (float x, float t) {
+    public static float Wave (float x, float z, float t) {
         return Sin(PI * (x + t));
     }
 
-    public static float MultiWave (float x, float t)
+    public static float MultiWave (float x, float z, float t)
     {
-        float y = Wave(x,t);
+        float y = Wave(x,z,t);
         y += Sin(2*PI * (x + t*0.7f))/2;
         return y/1.5f;
     }
@@ -33,7 +34,7 @@ public static class FunctionLib
     /// <param name="x"></param>
     /// <param name="t"></param>
     /// <returns></returns>
-    public static float Ripple (float x, float t)
+    public static float Ripple (float x, float z, float t)
     {
         float d = Abs(x);
         return Sin(4 * PI * (d - t*0.2f)) / (1f + 10f * d);

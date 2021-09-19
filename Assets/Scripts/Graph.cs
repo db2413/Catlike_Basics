@@ -39,7 +39,7 @@ public class Graph : MonoBehaviour
             FunctionLib.Function f = FunctionLib.GetFunction(function);
             Transform point = points[i];
             Vector3 position = point.localPosition;
-            position.y = f(position.x,time);
+            position.y = f(position.x,position.z,time);
 
             point.localPosition = position;
         }
