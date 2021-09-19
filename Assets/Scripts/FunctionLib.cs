@@ -62,8 +62,8 @@ public static class FunctionLib
 
     public static Vector3 Sphere (float u, float v, float t)
     {
-        //float r = 0.5f + 0.5f * Sin(PI * t); // radius scaled by time 0 to 1
-        float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t)); //twisty thing
+        float r = 0.75f + 0.25f * Sin(PI * t); // radius scaled by time 0 to 1
+        //float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t)); //twisty thing
         float s = r * Cos(0.5f * PI * v);
         Vector3 p;
         p.x = s * Sin(PI * u) ;
