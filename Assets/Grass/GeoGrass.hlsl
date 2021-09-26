@@ -15,7 +15,8 @@ struct GeomData
 GeomData SetupVertex(float3 positionWS, float3 normalWS, float4 uv0, float3 center){
 	GeomData output = (GeomData)0;
 	output.positionWS = mul(unity_CameraToWorld,positionWS-center) + center;
-	output.normalWS = normalWS;
+	//output.positionWS = (positionWS-center + output.positionWS-center)/2 + center;
+	output.normalWS = mul(unity_WorldToCamera, normalWS);
 	output.uv0 = uv0;
 	output.positionCS = TransformWorldToHClip(output.positionWS);
 	return output;
@@ -63,18 +64,23 @@ void geom(triangle GeomData input[3], inout TriangleStream<GeomData> triStream)
 	vert2.uv0 = float4(0,0,0,0);
 
 	float3 center = GetTriangleCenter(vert0.positionWS, vert1.positionWS, vert2.positionWS);
+	float randomX = frac(sin(center.x+center.y+center.z)*10000) - 0.5;
+	float randomZ = frac(sin(randomX)*10000) -0.5;
+	float randomSize = frac(sin(randomZ)*10000)/4 + 0.25;
+	randomSize = randomSize/1.4;
+	center = float3(center.x+randomX,center.y, center.z + randomZ);
 
 	GeomData bottomA = (GeomData)0;
-	bottomA.positionWS = center + 0.5 * float3(1,0,0);
+	bottomA.positionWS = center + randomSize * float3(1,0,0);
 	bottomA.uv0 = float4(0,0,0,0);
 	GeomData bottomD = (GeomData)0;
-	bottomD.positionWS = center - 0.5 * float3(1,0,0);
+	bottomD.positionWS = center - randomSize * float3(1,0,0);
 	bottomD.uv0 = float4(1,0,0,0);
 	GeomData topB = (GeomData)0;
-	topB.positionWS = center + 0.5 * float3(1,0,0) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
+	topB.positionWS = center + randomSize * float3(1,0,0) + 2 * randomSize * GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
 	topB.uv0 = float4(0,1,0,0);
 	GeomData topC = (GeomData)0;
-	topC.positionWS = center - 0.5 * float3(1,0,0) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
+	topC.positionWS = center - randomSize * float3(1,0,0) + 2 * randomSize * GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
 	topC.uv0 = float4(1,1,0,0);
 
 	SetupAndOutPutQuad(triStream, bottomA, topB, topC, bottomD, center);

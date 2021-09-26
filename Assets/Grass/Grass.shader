@@ -297,7 +297,7 @@ Shader "Custom/GrassSG"
         SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
         {
             SurfaceDescription surface = (SurfaceDescription)0;
-            surface.BaseColor = _Color;
+            surface.BaseColor = _Color * (SAMPLE_TEXTURE2D(_GrassTexture, sampler_GrassTexture, (IN.uv0).xy)).xyz ;
             surface.NormalTS = IN.TangentSpaceNormal;
             surface.Emission = float3(0, 0, 0);
             surface.Metallic = 0;
@@ -919,8 +919,8 @@ Shader "Custom/GrassSG"
         SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
         {
             SurfaceDescription surface = (SurfaceDescription)0;
-            surface.Alpha = 0;
-            surface.AlphaClipThreshold = 0.1;
+			surface.Alpha =  (SAMPLE_TEXTURE2D(_GrassTexture, sampler_GrassTexture, (IN.uv0).xy)).w;
+            surface.AlphaClipThreshold = 0.5;
             return surface;
         }
 
@@ -946,7 +946,7 @@ Shader "Custom/GrassSG"
 
 
 
-
+			output.uv0 = input.texCoord0;
             output.WorldSpacePosition =          input.positionWS;
         #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
         #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
