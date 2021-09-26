@@ -12,33 +12,31 @@ struct GeomData
 	float4 shadowCoord         : TEXCOORD8;		
 };
 
-GeomData SetupVertex(float3 positionWS, float3 normalWS, float4 uv0){
+GeomData SetupVertex(float3 positionWS, float3 normalWS, float4 uv0, float3 center){
 	GeomData output = (GeomData)0;
-	output.positionWS = positionWS;
+	output.positionWS = mul(unity_CameraToWorld,positionWS-center) + center;
 	output.normalWS = normalWS;
 	output.uv0 = uv0;
-	output.positionCS = TransformWorldToHClip(positionWS);
+	output.positionCS = TransformWorldToHClip(output.positionWS);
 	return output;
 }
-
-
 
 // Returns the normal of a plane containing the triangle defined by the three arguments
 float3 GetNormalFromTriangle(float3 a, float3 b, float3 c) {
     return normalize(cross(b - a, c - a));
 }
 
-void SetupAndOutputTriangle(inout TriangleStream<GeomData> outputStream, GeomData a, GeomData b, GeomData c) {
+void SetupAndOutputTriangle(inout TriangleStream<GeomData> outputStream, GeomData a, GeomData b, GeomData c, float3 center) {
 	outputStream.RestartStrip();
 	float3 normalWS = GetNormalFromTriangle(a.positionWS,b.positionWS, c.positionWS);
-	outputStream.Append(SetupVertex(a.positionWS, normalWS, a.uv0));
-	outputStream.Append(SetupVertex(b.positionWS, normalWS, b.uv0));
-	outputStream.Append(SetupVertex(c.positionWS, normalWS, c.uv0));
+	outputStream.Append(SetupVertex(a.positionWS, normalWS, a.uv0, center));
+	outputStream.Append(SetupVertex(b.positionWS, normalWS, b.uv0, center));
+	outputStream.Append(SetupVertex(c.positionWS, normalWS, c.uv0, center));
 }
 
-void SetupAndOutPutQuad(inout TriangleStream<GeomData> outputStream, GeomData a, GeomData b, GeomData c, GeomData d){
-	SetupAndOutputTriangle(outputStream, a, b, c);
-	SetupAndOutputTriangle(outputStream, c, d, a);
+void SetupAndOutPutQuad(inout TriangleStream<GeomData> outputStream, GeomData a, GeomData b, GeomData c, GeomData d, float3 center){
+	SetupAndOutputTriangle(outputStream, a, b, c, center);
+	SetupAndOutputTriangle(outputStream, c, d, a, center);
 }
 
 // Returns the center point of a triangle defined by the three arguments
@@ -67,18 +65,18 @@ void geom(triangle GeomData input[3], inout TriangleStream<GeomData> triStream)
 	float3 center = GetTriangleCenter(vert0.positionWS, vert1.positionWS, vert2.positionWS);
 
 	GeomData bottomA = (GeomData)0;
-	bottomA.positionWS = center + 0.5 * (vert0.positionWS - center);
+	bottomA.positionWS = center + 0.5 * float3(1,0,0);
 	bottomA.uv0 = float4(0,0,0,0);
 	GeomData bottomD = (GeomData)0;
-	bottomD.positionWS = center - 0.5 * (vert0.positionWS - center);
+	bottomD.positionWS = center - 0.5 * float3(1,0,0);
 	bottomD.uv0 = float4(1,0,0,0);
 	GeomData topB = (GeomData)0;
-	topB.positionWS = center + 0.5 * (vert0.positionWS - center) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS) ;
+	topB.positionWS = center + 0.5 * float3(1,0,0) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
 	topB.uv0 = float4(0,1,0,0);
 	GeomData topC = (GeomData)0;
-	topC.positionWS = center - 0.5 * (vert0.positionWS - center) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
+	topC.positionWS = center - 0.5 * float3(1,0,0) + GetNormalFromTriangle(vert0.positionWS, vert1.positionWS, vert2.positionWS);
 	topC.uv0 = float4(1,1,0,0);
 
-	SetupAndOutPutQuad(triStream, bottomA, topB, topC, bottomD);
-	SetupAndOutputTriangle(triStream, vert0, vert1, vert2);
+	SetupAndOutPutQuad(triStream, bottomA, topB, topC, bottomD, center);
+	//SetupAndOutputTriangle(triStream, vert0, vert1, vert2);
 }
