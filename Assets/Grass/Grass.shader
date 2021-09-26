@@ -73,10 +73,12 @@ Shader "Custom/GrassSG"
         #define _NORMAL_DROPOFF_TS 1
         #define ATTRIBUTES_NEED_NORMAL
         #define ATTRIBUTES_NEED_TANGENT
+		#define ATTRIBUTES_NEED_TEXCOORD0
         #define ATTRIBUTES_NEED_TEXCOORD1
         #define VARYINGS_NEED_POSITION_WS
         #define VARYINGS_NEED_NORMAL_WS
         #define VARYINGS_NEED_TANGENT_WS
+		#define VARYINGS_NEED_TEXCOORD0
         #define VARYINGS_NEED_VIEWDIRECTION_WS
         #define VARYINGS_NEED_FOG_AND_VERTEX_LIGHT
         #define FEATURES_GRAPH_VERTEX
@@ -102,6 +104,7 @@ Shader "Custom/GrassSG"
             float3 positionOS : POSITION;
             float3 normalOS : NORMAL;
             float4 tangentOS : TANGENT;
+            float4 uv0 : TEXCOORD0;
             float4 uv1 : TEXCOORD1;
             #if UNITY_ANY_INSTANCING_ENABLED
             uint instanceID : INSTANCEID_SEMANTIC;
@@ -113,6 +116,7 @@ Shader "Custom/GrassSG"
             float3 positionWS;
             float3 normalWS;
             float4 tangentWS;
+            float4 texCoord0;
             float3 viewDirectionWS;
             #if defined(LIGHTMAP_ON)
             float2 lightmapUV;
@@ -139,12 +143,14 @@ Shader "Custom/GrassSG"
         {
             float3 TangentSpaceNormal;
             float3 WorldSpacePosition;
+            float4 uv0;
         };
         struct VertexDescriptionInputs
         {
             float3 ObjectSpaceNormal;
             float3 ObjectSpaceTangent;
             float3 ObjectSpacePosition;
+            float4 uv0;
         };
         struct PackedVaryings
         {
@@ -152,15 +158,16 @@ Shader "Custom/GrassSG"
             float3 interp0 : TEXCOORD0;
             float3 interp1 : TEXCOORD1;
             float4 interp2 : TEXCOORD2;
-            float3 interp3 : TEXCOORD3;
+            float4 interp3 : TEXCOORD3;
+            float3 interp4 : TEXCOORD4;
             #if defined(LIGHTMAP_ON)
-            float2 interp4 : TEXCOORD4;
+            float2 interp5 : TEXCOORD5;
             #endif
             #if !defined(LIGHTMAP_ON)
-            float3 interp5 : TEXCOORD5;
+            float3 interp6 : TEXCOORD6;
             #endif
-            float4 interp6 : TEXCOORD6;
             float4 interp7 : TEXCOORD7;
+            float4 interp8 : TEXCOORD8;
             #if UNITY_ANY_INSTANCING_ENABLED
             uint instanceID : CUSTOM_INSTANCE_ID;
             #endif
@@ -182,15 +189,16 @@ Shader "Custom/GrassSG"
             output.interp0.xyz =  input.positionWS;
             output.interp1.xyz =  input.normalWS;
             output.interp2.xyzw =  input.tangentWS;
-            output.interp3.xyz =  input.viewDirectionWS;
+            output.interp3.xyzw =  input.texCoord0;
+            output.interp4.xyz =  input.viewDirectionWS;
             #if defined(LIGHTMAP_ON)
-            output.interp4.xy =  input.lightmapUV;
+            output.interp5.xy =  input.lightmapUV;
             #endif
             #if !defined(LIGHTMAP_ON)
-            output.interp5.xyz =  input.sh;
+            output.interp6.xyz =  input.sh;
             #endif
-            output.interp6.xyzw =  input.fogFactorAndVertexLight;
-            output.interp7.xyzw =  input.shadowCoord;
+            output.interp7.xyzw =  input.fogFactorAndVertexLight;
+            output.interp8.xyzw =  input.shadowCoord;
             #if UNITY_ANY_INSTANCING_ENABLED
             output.instanceID = input.instanceID;
             #endif
@@ -212,15 +220,16 @@ Shader "Custom/GrassSG"
             output.positionWS = input.interp0.xyz;
             output.normalWS = input.interp1.xyz;
             output.tangentWS = input.interp2.xyzw;
-            output.viewDirectionWS = input.interp3.xyz;
+            output.texCoord0 = input.interp3.xyzw;
+            output.viewDirectionWS = input.interp4.xyz;
             #if defined(LIGHTMAP_ON)
-            output.lightmapUV = input.interp4.xy;
+            output.lightmapUV = input.interp5.xy;
             #endif
             #if !defined(LIGHTMAP_ON)
-            output.sh = input.interp5.xyz;
+            output.sh = input.interp6.xyz;
             #endif
-            output.fogFactorAndVertexLight = input.interp6.xyzw;
-            output.shadowCoord = input.interp7.xyzw;
+            output.fogFactorAndVertexLight = input.interp7.xyzw;
+            output.shadowCoord = input.interp8.xyzw;
             #if UNITY_ANY_INSTANCING_ENABLED
             output.instanceID = input.instanceID;
             #endif
@@ -258,14 +267,17 @@ Shader "Custom/GrassSG"
             float3 Position;
             float3 Normal;
             float3 Tangent;
+            float4 uv0;
         };
 
         VertexDescription VertexDescriptionFunction(VertexDescriptionInputs IN)
         {
             VertexDescription description = (VertexDescription)0;
+			float4 _UV = IN.uv0;
             description.Position = IN.ObjectSpacePosition;
             description.Normal = IN.ObjectSpaceNormal;
             description.Tangent = IN.ObjectSpaceTangent;
+            description.uv0 = IN.uv0;
             return description;
         }
 
@@ -291,8 +303,7 @@ Shader "Custom/GrassSG"
             surface.Metallic = 0;
             surface.Smoothness = 0.5;
             surface.Occlusion = 1;
-            float3 pos = (IN.WorldSpacePosition).x;
-            surface.Alpha = 1;
+            surface.Alpha =  (SAMPLE_TEXTURE2D(_GrassTexture, sampler_GrassTexture, (IN.uv0).xy)).w;
             surface.AlphaClipThreshold = 0.5;
             return surface;
         }
@@ -308,6 +319,7 @@ Shader "Custom/GrassSG"
             output.ObjectSpaceNormal =           input.normalOS;
             output.ObjectSpaceTangent =          input.tangentOS.xyz;
             output.ObjectSpacePosition =         input.positionOS;
+            output.uv0	 =						 input.uv0;
 
             return output;
         }
@@ -318,6 +330,7 @@ Shader "Custom/GrassSG"
 
             output.TangentSpaceNormal =          float3(0.0f, 0.0f, 1.0f);
             output.WorldSpacePosition =          input.positionWS;
+            output.uv0 =          input.texCoord0;
 
 			#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 			#define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
