@@ -133,8 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 568955374}
   - component: {fileID: 568955373}
+  - component: {fileID: 568955375}
   m_Layer: 0
-  m_Name: VolumeGraph
+  m_Name: VolumeGraphGPU
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,15 +150,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 568955372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6250f231a0608f44f95b638b997f92f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e05ec59bbb7b2c40af5daa216d5b896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surfaceOrVolume: 0
-  pointPrefab: {fileID: 299007988993315681, guid: b314c75760045f94183f517940ce2092, type: 3}
-  resolution: 57
-  function: 4
-  functionDuration: 3
-  transitionDuration: 3
+  resolution: 16
+  function: 0
+  functionDuration: 1
+  transitionDuration: 0
+  computeShader: {fileID: 7200000, guid: 04c2f8d393277844a99062e029606326, type: 3}
+  material: {fileID: 2100000, guid: fd625785f4f45a44491c967971c8b363, type: 2}
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &568955374
 Transform:
   m_ObjectHideFlags: 0
@@ -172,6 +174,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &568955375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568955372}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6250f231a0608f44f95b638b997f92f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceOrVolume: 0
+  pointPrefab: {fileID: 299007988993315681, guid: b314c75760045f94183f517940ce2092, type: 3}
+  resolution: 29
+  function: 0
+  functionDuration: 1
+  transitionDuration: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
