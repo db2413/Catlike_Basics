@@ -48,7 +48,7 @@ public class MeshAnalyzer : MonoBehaviour
     /// Places a vertex randomly inside a triangle, adjusting normals
     /// </summary>
     /// <returns></returns>
-    private Vertex FillTriangleWithVertex(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, System.Random rand)
+    private Vertex FillTriangleWithVertex(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector2 u1, Vector2 u2, Vector2 u3, System.Random rand)
     {
         Vertex v;
         float x1 = (float) rand.NextDouble();
@@ -57,6 +57,7 @@ public class MeshAnalyzer : MonoBehaviour
 
         v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);
         v.normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
+        v.uv0 = (u1 * x1 + u2 * x2 + u3 * x3) / (x1 + x2 + x3);
 
         return v;
     }
@@ -109,7 +110,7 @@ public class MeshAnalyzer : MonoBehaviour
     // tris: array of vertices. Every 3 makes a triangle. Object space
     // density: point per m^2
     // Returns an array of points scattered around evenly across the area
-    private List<Vertex> DistributedSurfaceVertices(List<float> areas, int[] tris, Vector3[] verts, Vector3[] normals, float density, int seed = 0)
+    private List<Vertex> DistributedSurfaceVertices(List<float> areas, int[] tris, Vector3[] verts, Vector3[] normals, Vector2[] uv, float density, int seed = 0)
     {
         var areaSum = areas.Last();
         int vertexCount = (int)(density * areaSum);
@@ -122,13 +123,11 @@ public class MeshAnalyzer : MonoBehaviour
             int tri = 3 * ChooseTriangle(areas, tris, rand); // Index of the chosen triangle in tris array
             int i1 = tris[tri], i2 = tris[tri+1], i3 = tris[tri + 2]; // Vert and normal indexes of the triangle
             Vertex vert = FillTriangleWithVertex(
-                            verts[i1],
-                            verts[i2],
-                            verts[i3],
-                            normals[i1],
-                            normals[i2],
-                            normals[i3],
-                            rand);
+                            verts[i1], verts[i2], verts[i3],
+                            normals[i1], normals[i2], normals[i3],
+                            uv[i1], uv[i2], uv[i3],
+                            rand
+                          );
             vertices.Add(vert);
         }
 
@@ -140,6 +139,7 @@ public class MeshAnalyzer : MonoBehaviour
         var tris = mesh.triangles;
         var verts = mesh.vertices;
         var normals = mesh.normals;
+        var uv = mesh.uv;
 
         var areas = MapTrianglesToAreas(tris, verts);
 
@@ -148,6 +148,7 @@ public class MeshAnalyzer : MonoBehaviour
                                 tris,
                                 verts,
                                 normals,
+                                uv,
                                 density*transform.localScale.magnitude,
                                 seed);
     }
@@ -184,7 +185,8 @@ public class MeshAnalyzer : MonoBehaviour
             {
                 Debug.DrawLine(
                     transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position),
-                    transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position) + scatteredVertices[i].normal * .2f);
+                    transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position) + scatteredVertices[i].normal * .2f,
+                    new Color(scatteredVertices[i].uv0.x, scatteredVertices[i].uv0.y, 0));
             }
         }
     }
@@ -194,4 +196,5 @@ public struct Vertex
 {
     public Vector3 position;
     public Vector3 normal;
+    public Vector2 uv0;
 }
