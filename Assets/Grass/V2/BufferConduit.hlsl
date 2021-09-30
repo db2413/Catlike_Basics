@@ -19,6 +19,9 @@ void ConfigureProcedural () {
 		unity_ObjectToWorld._m03_m13_m23_m33 = float4(pos.x,pos.y,pos.z, 1);
 		unity_ObjectToWorld._m03_m13_m23_m33 = mul(_ObjectToWorld, unity_ObjectToWorld._m03_m13_m23_m33);
 		unity_ObjectToWorld._m00_m11_m22 = _CardSize;
+		//float3x3 rot = unity_ObjectToWorld;
+
+
 	#endif
 }
 
