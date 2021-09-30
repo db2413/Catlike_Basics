@@ -14,9 +14,7 @@ public class CardInstantiater : MonoBehaviour
     MeshAnalyzer meshAnalyzer;
 
     static int
-        srcVertId = Shader.PropertyToID("_SourceVertices"),
-        ObjToWrldID = Shader.PropertyToID("_ObjectToWorld"),
-        CardSizeID = Shader.PropertyToID("_CardSize");
+        srcVertId = Shader.PropertyToID("_SourceVertices");
 
     private void OnEnable()
     {
@@ -32,12 +30,11 @@ public class CardInstantiater : MonoBehaviour
             return;
         }
         Debug.Log("Have source verts:" + sourceVerts.Count);
-        sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 8 * 4); // 3 for position,3 for normal,2 for uv. 4 Bytes each
+        sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 21 * 4); // 3 for position,3 for normal,2 for uv. 4 Bytes each
         sourceVerticeBuffer.SetData(sourceVerts.ToArray());
         propertyBlock ??= new MaterialPropertyBlock();
         propertyBlock.SetBuffer(srcVertId, sourceVerticeBuffer);
         Vector3 meshOrigin = meshAnalyzer.transform.position;
-        propertyBlock.SetMatrix(ObjToWrldID, transform.localToWorldMatrix);
     }
 
     private void OnDisable()
@@ -68,7 +65,9 @@ public class CardInstantiater : MonoBehaviour
         }
 
         Vector3 meshOrigin = meshAnalyzer.transform.position;
-        propertyBlock.SetMatrix(ObjToWrldID, transform.localToWorldMatrix);
+        propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldRotation"), Matrix4x4.Rotate(transform.rotation));
+        propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldPosition"), Matrix4x4.Translate(transform.position));
+        propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldScale"), Matrix4x4.Scale(transform.localScale));
         propertyBlock.SetFloat("_CardSize", cardSize);
         Graphics.DrawMeshInstancedProcedural(
             card,

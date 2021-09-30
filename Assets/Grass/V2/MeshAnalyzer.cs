@@ -64,7 +64,8 @@ public class MeshAnalyzer : MonoBehaviour
 
         var scale = transform.localScale;
         v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);                                            // Random point on object triangle
-        v.normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
+        Vector3 normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
+        v.rot = Matrix4x4.Rotate(Quaternion.FromToRotation(Vector3.up, normal));
         v.uv0 = (u1 * x1 + u2 * x2 + u3 * x3) / (x1 + x2 + x3);
 
         return v;
@@ -193,7 +194,7 @@ public class MeshAnalyzer : MonoBehaviour
             {
                 Debug.DrawLine(
                     transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position),
-                    transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position) + scatteredVertices[i].normal * .2f,
+                    transform.localToWorldMatrix.MultiplyPoint(scatteredVertices[i].position) + Vector3.up * .2f,
                     new Color(scatteredVertices[i].uv0.x, scatteredVertices[i].uv0.y, 0));
             }
         }
@@ -203,6 +204,6 @@ public class MeshAnalyzer : MonoBehaviour
 public struct Vertex
 {
     public Vector3 position;
-    public Vector3 normal;
+    public Matrix4x4 rot;
     public Vector2 uv0;
 }
