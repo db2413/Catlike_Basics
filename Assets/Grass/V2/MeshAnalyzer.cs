@@ -62,7 +62,8 @@ public class MeshAnalyzer : MonoBehaviour
         float x2 = (float) rand.NextDouble();
         float x3 = (float) rand.NextDouble();
 
-        v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);
+        var scale = transform.localScale;
+        v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);                                            // Random point on object triangle
         v.normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
         v.uv0 = (u1 * x1 + u2 * x2 + u3 * x3) / (x1 + x2 + x3);
 

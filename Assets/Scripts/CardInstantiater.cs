@@ -14,7 +14,7 @@ public class CardInstantiater : MonoBehaviour
 
     static int
         srcVertId = Shader.PropertyToID("_SourceVertices"),
-        meshOriginId = Shader.PropertyToID("_MeshOrigin");
+        ObjToWrldID = Shader.PropertyToID("_ObjectToWorld");
 
     private void OnEnable()
     {
@@ -35,7 +35,7 @@ public class CardInstantiater : MonoBehaviour
         propertyBlock ??= new MaterialPropertyBlock();
         propertyBlock.SetBuffer(srcVertId, sourceVerticeBuffer);
         Vector3 meshOrigin = meshAnalyzer.transform.position;
-        propertyBlock.SetVector(meshOriginId, new Vector4(meshOrigin.x, meshOrigin.y, meshOrigin.z, 1));
+        propertyBlock.SetMatrix(ObjToWrldID, transform.localToWorldMatrix);
     }
 
     private void OnDisable()
@@ -65,6 +65,8 @@ public class CardInstantiater : MonoBehaviour
             return;
         }
 
+        Vector3 meshOrigin = meshAnalyzer.transform.position;
+        propertyBlock.SetMatrix(ObjToWrldID, transform.localToWorldMatrix);
         Graphics.DrawMeshInstancedProcedural(
             card,
             0,
