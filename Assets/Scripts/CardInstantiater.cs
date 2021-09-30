@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardInstantiater : MonoBehaviour
 {
     [SerializeField] Mesh card;
+    [SerializeField] float cardSize;
     [SerializeField] Material material;
 
 
@@ -14,7 +15,8 @@ public class CardInstantiater : MonoBehaviour
 
     static int
         srcVertId = Shader.PropertyToID("_SourceVertices"),
-        ObjToWrldID = Shader.PropertyToID("_ObjectToWorld");
+        ObjToWrldID = Shader.PropertyToID("_ObjectToWorld"),
+        CardSizeID = Shader.PropertyToID("_CardSize");
 
     private void OnEnable()
     {
@@ -67,6 +69,7 @@ public class CardInstantiater : MonoBehaviour
 
         Vector3 meshOrigin = meshAnalyzer.transform.position;
         propertyBlock.SetMatrix(ObjToWrldID, transform.localToWorldMatrix);
+        propertyBlock.SetFloat("_CardSize", cardSize);
         Graphics.DrawMeshInstancedProcedural(
             card,
             0,

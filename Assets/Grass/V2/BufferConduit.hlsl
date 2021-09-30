@@ -8,6 +8,7 @@ struct sourceVert
 #if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
 	StructuredBuffer<sourceVert> _SourceVertices;
 	float4x4 _ObjectToWorld;
+	float _CardSize;
 #endif
 
 void ConfigureProcedural () {
@@ -17,8 +18,7 @@ void ConfigureProcedural () {
 		unity_ObjectToWorld = 0;
 		unity_ObjectToWorld._m03_m13_m23_m33 = float4(pos.x,pos.y,pos.z, 1);
 		unity_ObjectToWorld._m03_m13_m23_m33 = mul(_ObjectToWorld, unity_ObjectToWorld._m03_m13_m23_m33);
-		//unity_ObjectToWorld._m03_m13_m23 += _ObjectToWorld._m03_m13_m23;
-		unity_ObjectToWorld._m00_m11_m22 = 0.05;
+		unity_ObjectToWorld._m00_m11_m22 = _CardSize;
 	#endif
 }
 
