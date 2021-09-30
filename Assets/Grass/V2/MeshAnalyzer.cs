@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static UnityEngine.Mathf;
-
+using UnityEngine.Events;
 
 [RequireComponent(typeof(MeshFilter))]
 public class MeshAnalyzer : MonoBehaviour
@@ -11,10 +11,12 @@ public class MeshAnalyzer : MonoBehaviour
     Mesh mesh;
     public int seed;
     public int density;
-    List<Vertex> scatteredVertices;
     public List<Vertex> GetScatteredVerts() {
         return scatteredVertices;
     }
+    public UnityEvent OnDone;
+
+    List<Vertex> scatteredVertices;
 
     float TriangleArea(Vector3 v1, Vector3 v2, Vector3 v3)
     {
@@ -114,7 +116,6 @@ public class MeshAnalyzer : MonoBehaviour
     {
         var areaSum = areas.Last();
         int vertexCount = (int)(density * areaSum);
-        Debug.Log("Num Verts:" + vertexCount);
         List<Vertex> vertices = new List<Vertex>();
         System.Random rand = new System.Random(seed);
 
@@ -134,7 +135,7 @@ public class MeshAnalyzer : MonoBehaviour
         return vertices;
     }
 
-    public void Solve(float density,int seed = 0)
+    private void Solve(float density,int seed = 0)
     {
         var tris = mesh.triangles;
         var verts = mesh.vertices;
@@ -162,6 +163,7 @@ public class MeshAnalyzer : MonoBehaviour
             Debug.LogError("Should have mesh");
         }
         Solve((float)density, seed);
+        OnDone?.Invoke();
     }
     private void OnDisable()
     {
