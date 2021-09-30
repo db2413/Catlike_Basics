@@ -308,7 +308,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d32997df08ff4eb43a6a69e9df3bc847, type: 2}
+  - {fileID: 2100000, guid: 88c7bf154b9ba9b4099a972c43bc4681, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  density: 500
+  density: 2
   OnDone:
     m_PersistentCalls:
       m_Calls: []
@@ -402,7 +402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b09c5ffaf78a89e42b380122eae04de6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 943649512}
+  card: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: d32997df08ff4eb43a6a69e9df3bc847, type: 2}
 --- !u!135 &943649509
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -473,7 +474,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943649506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.391, y: 1.239, z: -0.95}
+  m_LocalPosition: {x: 0.429, y: 1.239, z: -0.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -642,7 +643,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d32997df08ff4eb43a6a69e9df3bc847, type: 2}
+  - {fileID: 2100000, guid: 88c7bf154b9ba9b4099a972c43bc4681, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

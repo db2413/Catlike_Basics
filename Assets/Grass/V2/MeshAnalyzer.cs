@@ -8,14 +8,19 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MeshFilter))]
 public class MeshAnalyzer : MonoBehaviour
 {
-    Mesh mesh;
-    public int seed;
-    public int density;
+    [SerializeField] int seed;
+    [SerializeField] int density;
+
     public List<Vertex> GetScatteredVerts() {
         return scatteredVertices;
     }
     public UnityEvent OnDone;
+    public Bounds GetBounds()
+    {
+        return mesh.bounds;
+    }
 
+    Mesh mesh;
     List<Vertex> scatteredVertices;
 
     float TriangleArea(Vector3 v1, Vector3 v2, Vector3 v3)
@@ -181,7 +186,7 @@ public class MeshAnalyzer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (scatteredVertices?.Count > 0 && enabled)
+        if (false && scatteredVertices?.Count > 0 && enabled)
         {
             for (int i = 0; i < scatteredVertices.Count; i++)
             {

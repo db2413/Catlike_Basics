@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class CardInstantiater : MonoBehaviour
 {
-    public Transform card;
+    [SerializeField] Mesh card;
+    [SerializeField] Material material;
+
+
     ComputeBuffer sourceVerticeBuffer;
     MaterialPropertyBlock propertyBlock;
     MeshAnalyzer meshAnalyzer;
+
+    static int
+        srcVertId = Shader.PropertyToID("_SourceVertices"),
+        meshOriginId = Shader.PropertyToID("_MeshOrigin");
 
     private void OnEnable()
     {
@@ -22,8 +29,13 @@ public class CardInstantiater : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Have source verts");
-        sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 8 * 4);
+        Debug.Log("Have source verts:" + sourceVerts.Count);
+        sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 8 * 4); // 3 for position,3 for normal,2 for uv. 4 Bytes each
+        sourceVerticeBuffer.SetData(sourceVerts.ToArray());
+        propertyBlock ??= new MaterialPropertyBlock();
+        propertyBlock.SetBuffer(srcVertId, sourceVerticeBuffer);
+        Vector3 meshOrigin = meshAnalyzer.transform.position;
+        propertyBlock.SetVector(meshOriginId, new Vector4(meshOrigin.x, meshOrigin.y, meshOrigin.z, 1));
     }
 
     private void OnDisable()
@@ -50,6 +62,16 @@ public class CardInstantiater : MonoBehaviour
         if (sourceVerticeBuffer == null)
         {
             InstantiateCards();
+            return;
         }
+
+        Graphics.DrawMeshInstancedProcedural(
+            card,
+            0,
+            material,
+            meshAnalyzer.GetBounds(),
+            sourceVerticeBuffer.count,
+            propertyBlock
+        );
     }
 }
