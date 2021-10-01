@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardInstantiater : MonoBehaviour
 {
     [SerializeField] Mesh card;
-    [SerializeField] float cardSize;
+    [SerializeField] float cardSize = 0.1f;
     [SerializeField] Material material;
 
 
