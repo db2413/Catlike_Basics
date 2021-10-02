@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace V1
+namespace V4
 {
     public class CardInstantiater : MonoBehaviour
     {
@@ -32,7 +32,7 @@ namespace V1
                 return;
             }
             Debug.Log("Have source verts:" + sourceVerts.Count);
-            sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 21 * 4); // 3 for position,3 for normal,2 for uv. 4 Bytes each
+            sourceVerticeBuffer = new ComputeBuffer(sourceVerts.Count, 24 * 4); // 3 for position,16 for matrix, 3 for normal,2 for uv. 4 Bytes each
             sourceVerticeBuffer.SetData(sourceVerts.ToArray());
             propertyBlock ??= new MaterialPropertyBlock();
             propertyBlock.SetBuffer(srcVertId, sourceVerticeBuffer);
@@ -66,9 +66,7 @@ namespace V1
                 return;
             }
 
-            Vector3 meshOrigin = meshAnalyzer.transform.position;
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldRotation"), Matrix4x4.Rotate(transform.rotation));
-            propertyBlock.SetVector(Shader.PropertyToID("_ObjPos"), transform.position);
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldPosition"), Matrix4x4.Translate(transform.position));
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldScale"), Matrix4x4.Scale(transform.localScale));
             propertyBlock.SetFloat("_CardSize", cardSize);

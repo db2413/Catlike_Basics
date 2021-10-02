@@ -5,7 +5,7 @@ using System.Linq;
 using static UnityEngine.Mathf;
 using UnityEngine.Events;
 
-namespace V1
+namespace V3
 {
     [RequireComponent(typeof(MeshFilter))]
     public class MeshAnalyzer : MonoBehaviour

@@ -5,7 +5,7 @@ using System.Linq;
 using static UnityEngine.Mathf;
 using UnityEngine.Events;
 
-namespace V1
+namespace V4
 {
     [RequireComponent(typeof(MeshFilter))]
     public class MeshAnalyzer : MonoBehaviour
@@ -68,6 +68,7 @@ namespace V1
             var scale = transform.localScale;
             v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);                                            // Random point on object triangle
             Vector3 normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
+            v.normal = normal;
             v.rot = Matrix4x4.Rotate(Quaternion.FromToRotation(Vector3.up, normal));
             v.uv0 = (u1 * x1 + u2 * x2 + u3 * x3) / (x1 + x2 + x3);
 
@@ -207,6 +208,7 @@ namespace V1
     public struct Vertex
     {
         public Vector3 position;
+        public Vector3 normal;
         public Matrix4x4 rot;
         public Vector2 uv0;
     }

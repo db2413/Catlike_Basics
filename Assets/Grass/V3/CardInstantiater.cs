@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace V1
+namespace V3
 {
     public class CardInstantiater : MonoBehaviour
     {
@@ -68,7 +68,6 @@ namespace V1
 
             Vector3 meshOrigin = meshAnalyzer.transform.position;
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldRotation"), Matrix4x4.Rotate(transform.rotation));
-            propertyBlock.SetVector(Shader.PropertyToID("_ObjPos"), transform.position);
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldPosition"), Matrix4x4.Translate(transform.position));
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldScale"), Matrix4x4.Scale(transform.localScale));
             propertyBlock.SetFloat("_CardSize", cardSize);
