@@ -483,6 +483,8 @@ GameObject:
   - component: {fileID: 317896358}
   - component: {fileID: 317896357}
   - component: {fileID: 317896356}
+  - component: {fileID: 317896363}
+  - component: {fileID: 317896362}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -518,7 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 39
-  density: 50
+  density: 25
   OnDone:
     m_PersistentCalls:
       m_Calls: []
@@ -599,6 +601,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &317896362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317896355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338eae66549adb049b57e54823b47503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  card: {fileID: -1931742608654167734, guid: 39d0945e208bcef47b4acbe6cbf776d9, type: 3}
+  cardSize: 0.15
+  material: {fileID: 2100000, guid: d32997df08ff4eb43a6a69e9df3bc847, type: 2}
+--- !u!114 &317896363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317896355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46a3afb606557940be2775734b2bf7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  density: 1
+  OnDone:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &319796868
 GameObject:
   m_ObjectHideFlags: 0
