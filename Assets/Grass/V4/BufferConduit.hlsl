@@ -21,24 +21,28 @@ void ConfigureProcedural () {
 	#endif
 }
 
-void ShaderGraphFunction_float (float3 In, out float3 Out, out float3 Normal, out float3 Pos) {
+void ShaderGraphFunction_float (float3 In, out float3 Out, out float3 Normal, out float3 Pos, out float uid) {
 	Out = In;
 	Normal = -GetViewForwardDir();
 	Pos = float3(1,0,0);
+	uid = 0;
 	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
 		Normal = mul(_SourceVertices[unity_InstanceID].rot, float3(0,1,0));
 		Normal = normalize(mul(_ObjectToWarldRotation, Normal));
 		Pos = mul(_ObjectToWarldRotation, mul(_ObjectToWarldScale, _SourceVertices[unity_InstanceID].position)).xyz;
+		uid = float(unity_InstanceID);
 	#endif
 }
 
-void ShaderGraphFunction_half (half3 In, out half3 Out, out half3 Normal, out half3 Pos) {
+void ShaderGraphFunction_half (half3 In, out half3 Out, out half3 Normal, out half3 Pos, out half uid) {
 	Out = In;
 	Pos = float3(1,0,0);
 	Normal = -GetViewForwardDir();
+	uid = 0;
 	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
 		Normal = mul(_SourceVertices[unity_InstanceID].rot, float3(0,1,0));
 		Normal = normalize(mul(_ObjectToWarldRotation, Normal));
 		Pos = mul(_ObjectToWarldRotation, mul(_ObjectToWarldScale, _SourceVertices[unity_InstanceID].position)).xyz;
+		uid = half(unity_InstanceID);
 	#endif
 }
