@@ -520,7 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 39
-  density: 25
+  density: 30
   OnDone:
     m_PersistentCalls:
       m_Calls: []
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  cardSize: 0.6
+  cardSize: 1.01
   material: {fileID: 2100000, guid: d8e254213d00f09408d713e1d7f844e0, type: 2}
 --- !u!114 &1209515890
 MonoBehaviour:
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  density: 101
+  density: 46
   OnDone:
     m_PersistentCalls:
       m_Calls: []
@@ -1334,7 +1334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  cardSize: 0.6
+  cardSize: 0.94
   material: {fileID: 2100000, guid: d8e254213d00f09408d713e1d7f844e0, type: 2}
 --- !u!114 &1678100773
 MonoBehaviour:
@@ -1349,7 +1349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  density: 101
+  density: 53
   OnDone:
     m_PersistentCalls:
       m_Calls: []
