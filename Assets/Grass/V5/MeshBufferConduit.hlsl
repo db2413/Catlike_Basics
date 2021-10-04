@@ -7,6 +7,7 @@ struct sourceVert
 
 #if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
 	StructuredBuffer<sourceVert> _SourceVertices;
+	StructuredBuffer<float3> _VertexInfluences;
 	float4x4 _ObjectToWarldRotation;
 	float4x4 _ObjectToWarldScale;
 	float4x4 _ObjectToWarldPosition;
@@ -32,10 +33,18 @@ void ConfigureProcedural () {
 	#endif
 }
 
-void ShaderGraphFunction_float (float3 In, out float3 Out) {
+void ShaderGraphFunction_float (float3 In, out float3 Out, out float3 InfluenceDisplacement) {
 	Out = In;
+	InfluenceDisplacement=0;
+	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
+		InfluenceDisplacement = _VertexInfluences[unity_InstanceID];
+	#endif
 }
 
-void ShaderGraphFunction_half (half3 In, out half3 Out) {
+void ShaderGraphFunction_half (half3 In, out half3 Out, out float3 InfluenceDisplacement) {
 	Out = In;
+	InfluenceDisplacement=0;
+	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
+		InfluenceDisplacement = _VertexInfluences[unity_InstanceID];
+	#endif
 }

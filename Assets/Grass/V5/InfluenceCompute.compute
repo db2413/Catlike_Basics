@@ -1,0 +1,19 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+struct sourceVert
+{
+    float3 position;
+    float4x4 rot;
+    float2 uv0;
+};
+
+StructuredBuffer<sourceVert> _SourceVertices;
+RWStructuredBuffer<float3> _VertexInfluences;
+float3 _Influences;
+
+[numthreads(128,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+   _VertexInfluences[id.x] = float3(10,1,0);
+}
