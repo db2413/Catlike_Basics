@@ -55,18 +55,24 @@ namespace V5
 
 
         /// <summary>
-        /// Places a vertex randomly inside a triangle, adjusting normals
+        /// Places a vertex randomly inside a triangle, adjusting normals.
         /// </summary>
         /// <returns></returns>
         private Vertex FillTriangleWithVertex(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector2 u1, Vector2 u2, Vector2 u3, System.Random rand)
         {
             Vertex v;
+            Vector3 a = v3 - v1;
+            Vector3 b = v2 - v1;
             float x1 = (float)rand.NextDouble();
             float x2 = (float)rand.NextDouble();
-            float x3 = (float)rand.NextDouble();
+            if (x2+x1>1)
+            {
+                x1 = 1 - x1;
+                x2 = 1 - x2;
+            }
+            float x3 = 1 - x2 - x1;
 
-            var scale = transform.localScale;
-            v.position = (v1 * x1 + v2 * x2 + v3 * x3) / (x1 + x2 + x3);                                            // Random point on object triangle
+            v.position = v1 + x1 * a + x2 * b;
             Vector3 normal = (n1 * x1 + n2 * x2 + n3 * x3) / (x1 + x2 + x3);
             v.rot = Matrix4x4.Rotate(Quaternion.FromToRotation(Vector3.up, normal));
             v.uv0 = (u1 * x1 + u2 * x2 + u3 * x3) / (x1 + x2 + x3);
