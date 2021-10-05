@@ -18,8 +18,8 @@ float4x4 _ObjectToWarld;
 [numthreads(128,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-	float InfluenceMagnitude = 17;
-	float InfluenceRadius = 1.7;
+	float InfluenceMagnitude = 6;
+	float InfluenceRadius = 1.4;
 	uint v = id.x;
 
 	float3 pos = _SourceVertices[v].position.xyz;
@@ -27,7 +27,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	pos = mul(_ObjectToWarld, pos);
 
 	float3 diff = _Influences - pos;
-	float3 dis = distance(_Influences, pos);
+	float3 dis = distance(_Influences-float3(0,1,0), pos);
 
    _VertexInfluences[v] = -InfluenceMagnitude * saturate(1-dis/InfluenceRadius) * normalize(diff);
 }
