@@ -94,6 +94,7 @@ namespace V5
             }
 
             m_InfluenceComputeShader.SetVector("_Influences", mainInfluence.transform.position);
+            m_InfluenceComputeShader.SetMatrix("_ObjectToWarld", transform.localToWorldMatrix);
             m_InfluenceComputeShader.Dispatch( influenceKernel, dispatchSize, 1, 1);
 
             propertyBlock.SetMatrix(Shader.PropertyToID("_ObjectToWarldRotation"), Matrix4x4.Rotate(transform.rotation));
