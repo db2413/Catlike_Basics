@@ -11,7 +11,9 @@ struct sourceVert
 StructuredBuffer<sourceVert> _SourceVertices;
 RWStructuredBuffer<float3> _VertexInfluences;
 float3 _Influences;
-float4x4 _ObjectToWarld;
+float4x4 _ObjectToWarldScale;
+float4x4 _ObjectToWarldRotation;
+float3 _ObjectPos;
 
 
 
@@ -24,8 +26,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 	float3 pos = _SourceVertices[v].position.xyz;
 
-	pos = mul(_ObjectToWarld, pos);
-
+	pos = mul(_ObjectToWarldScale, pos);
+	pos = mul(_ObjectToWarldRotation, pos);
+	pos += _ObjectPos;
+	//pos = mul(_ObjectToWarldPosition, pos);
+		
 	float3 diff = _Influences - pos;
 	float3 dis = distance(_Influences-float3(0,1,0), pos);
 

@@ -42,7 +42,7 @@ void ConfigureProcedural () {
 		float3 pos = _SourceVertices[unity_InstanceID].position;
 		float4x4 rot = _SourceVertices[unity_InstanceID].rot;
 		float3 up = mul(rot,float3(0,1,0));
-		float4x4 spin = AngleAxis4x4(frac(sin(unity_InstanceID))*2, up);
+		float4x4 spin = AngleAxis4x4(frac(sin(unity_InstanceID))*3, up);
 
 		unity_ObjectToWorld = 0;
 		unity_ObjectToWorld._m00_m11_m22 = _CardSize * (1 + _SizeVariance * RandNOneAndOne(unity_InstanceID));
