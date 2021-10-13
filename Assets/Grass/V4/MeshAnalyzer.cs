@@ -20,7 +20,11 @@ namespace V4
         public UnityEvent OnDone;
         public Bounds GetBounds()
         {
-            return mesh.bounds;
+            Bounds b = mesh.bounds;
+            b.center = mesh.bounds.center + transform.position;
+            b.extents = Vector3.Scale(mesh.bounds.extents, transform.localScale); 
+            Debug.Log(b);
+            return b;
         }
 
         Mesh mesh;
