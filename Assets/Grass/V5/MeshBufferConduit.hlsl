@@ -39,27 +39,39 @@ float4x4 AngleAxis4x4(float angle, float3 axis)
 
 void ConfigureProcedural () {
 	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
-		float3 pos = _SourceVertices[unity_InstanceID].position;
-		float4x4 rot = _SourceVertices[unity_InstanceID].rot;
-		float3 up = mul(rot,float3(0,1,0));
-		float4x4 spin = AngleAxis4x4(frac(sin(unity_InstanceID))*3, up);
+            unity_ObjectToWorld._11_21_31_41 = float4(1, 0, 0, 0);
+            unity_ObjectToWorld._12_22_32_42 = float4(0, 1, 0, 0);
+            unity_ObjectToWorld._13_23_33_43 = float4(0, 0, 1, 0);
+            unity_ObjectToWorld._14_24_34_44 = float4(0, 0, 0, 1);
 
-		unity_ObjectToWorld = 0;
-		unity_ObjectToWorld._m00_m11_m22 = _CardSize * (1 + _SizeVariance * RandNOneAndOne(unity_InstanceID));
-		unity_ObjectToWorld = mul(rot, unity_ObjectToWorld);
-		unity_ObjectToWorld = mul(spin, unity_ObjectToWorld); //TODO Move to Vertex Displacement instead of the objToWorld
-		unity_ObjectToWorld._m03_m13_m23_m33 = float4(pos.x,pos.y,pos.z, 1);
-		unity_ObjectToWorld._m03_m13_m23_m33 = mul(_ObjectToWarldScale, unity_ObjectToWorld._m03_m13_m23_m33);
-		unity_ObjectToWorld = mul(_ObjectToWarldRotation, unity_ObjectToWorld);
-		unity_ObjectToWorld = mul(_ObjectToWarldPosition, unity_ObjectToWorld);
+			unity_WorldToObject = unity_ObjectToWorld;
+            unity_WorldToObject._14_24_34 *= -1;
+            unity_WorldToObject._11_22_33 = 1.0f / unity_WorldToObject._11_22_33;
 	#endif
 }
+
 
 void ShaderGraphFunction_float (float3 In, out float3 Out, out float3 InfluenceDisplacement) {
 	Out = In;
 	InfluenceDisplacement=0;
 	#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
 		InfluenceDisplacement = _VertexInfluences[unity_InstanceID];
+
+		float3 pos = _SourceVertices[unity_InstanceID].position;
+		float4x4 rot = _SourceVertices[unity_InstanceID].rot;
+		float3 up = mul(rot,float3(0,1,0));
+		float4x4 spin = AngleAxis4x4(frac(sin(unity_InstanceID))*3, up);
+
+		float4x4 uObjWrld = 0;
+		uObjWrld._m00_m11_m22 = _CardSize * (1 + _SizeVariance * RandNOneAndOne(unity_InstanceID));
+		uObjWrld = mul(rot, uObjWrld);
+		uObjWrld = mul(spin, uObjWrld); //TODO Move to Vertex Displacement instead of the objToWorld
+		uObjWrld._m03_m13_m23_m33 = float4(pos.x,pos.y,pos.z, 1);
+		uObjWrld._m03_m13_m23_m33 = mul(_ObjectToWarldScale, uObjWrld._m03_m13_m23_m33);
+		uObjWrld = mul(_ObjectToWarldRotation, uObjWrld);
+		uObjWrld = mul(_ObjectToWarldPosition, uObjWrld);
+		uObjWrld._m33 = 1;
+		Out = mul(uObjWrld, float4(In,1));
 	#endif
 }
 
