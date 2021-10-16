@@ -34,5 +34,5 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	float3 diff = _Influences - pos;
 	float3 dis = distance(_Influences-float3(0,1,0), pos);
 
-   _VertexInfluences[v] = -InfluenceMagnitude * saturate(1-dis/InfluenceRadius) * normalize(diff);
+   _VertexInfluences[v] = _VertexInfluences[v]*0.98-InfluenceMagnitude * saturate(1-dis/InfluenceRadius) * normalize(diff)*0.02;
 }

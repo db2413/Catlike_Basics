@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  density: 5
+  density: 6
   OnDone:
     m_PersistentCalls:
       m_Calls: []
