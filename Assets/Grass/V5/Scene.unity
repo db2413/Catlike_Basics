@@ -233,8 +233,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495ecf61b75955e4a8f53cfd03b7e8e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: -1931742608654167734, guid: 14e739d419270754095a1c8572d4c318, type: 3}
-  cardSize: 0.15
+  card: {fileID: -1931742608654167734, guid: 6dbf3adfb30d27c4ab0c3a63370091d4, type: 3}
+  cardSize: 0.14
   material: {fileID: 2100000, guid: 55c8f1a85cb2e7e4dafce6614607878b, type: 2}
   computeShader: {fileID: 7200000, guid: 7443c063797cfe34ab2e564e7f8f8e86, type: 3}
   mainInfluence: {fileID: 2026854944}
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  density: 6
+  density: 10
   OnDone:
     m_PersistentCalls:
       m_Calls: []
